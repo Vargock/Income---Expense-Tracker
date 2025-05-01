@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for
+
 import csv
 import json
-from typing import List, Dict
-
 import requests
-from flask import Flask, render_template, request, redirect, url_for
 
 # ─── 1. CONFIG & CONSTANTS ────────────────────────────────────────
 
