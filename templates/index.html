@@ -24,8 +24,8 @@
 
     <!------------------------------------------------------------------
       CURRENCY SELECTOR
-    ------------------------------------------------------------------->
-    <form method="POST" action="/set_currency" class="currency-form"> <!-- Method POST connects to set_currency() in app.py -->>
+      ------------------------------------------------------------------->
+      <form method="POST" action="/set_currency" class="currency-form"> <!-- Method POST connects to set_currency() funct in app.py -->>
       <div class="currency-form__selector">
         <button
           type="button"
@@ -138,6 +138,7 @@
     ------------------------------------------------------------------->
     <div id="ad-entry-modal" class="modal-card">
       <h3 class="modal-card__header">Add New Entry</h3>
+      <!-- Form connects to  -->
       <form
         action="{{ url_for('add_entry') }}"
         method="POST"
@@ -211,9 +212,13 @@
           Are you sure you want to delete this entry?
         </h3>
         <form id="delete-form" action="" method="POST" class="modal-card__form">
+
+          <!-- Confirm delete button -->
           <button type="submit" class="modal-card__btn modal-card__btn--save">
             Yes, delete
           </button>
+
+          <!-- Close & Cancel button, calls to closeDeleteModal()  -->
           <button
             type="button"
             class="modal-card__btn modal-card__btn--cancel"
@@ -221,6 +226,7 @@
           >
             Cancel
           </button>
+
         </form>
       </div>
     </div>
@@ -247,6 +253,7 @@
         deleteForm.action = "/delete/" + id;
         deleteModal.style.display = "flex";
       }
+      
       function closeDeleteModal() {
         deleteModal.style.display = "none";
       }

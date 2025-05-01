@@ -13,8 +13,8 @@ from flask import Flask, render_template, request, redirect, url_for
 
 DATA_FILE = "data.csv"
 SETTINGS_FILE = "settings.json"
-EXCHANGE_API_KEY = "3f7daa467d1bc05c774e7af9"  # ❓ move to env var
-EXCHANGE_API_URL = "https://v6.exchangerate-api.com/v6"
+EXCHANGE_API_KEY = "3f7daa467d1bc05c774e7af9"  # Personal API Key
+EXCHANGE_API_URL = "https://v6.exchangerate-api.com/v6"  # Basic API url
 
 app = Flask(__name__)
 
@@ -95,9 +95,8 @@ def fetch_exchange_rates(base: str = "USD") -> dict[str, float]:
 
 
 def load_data() -> list[Record]:
-    # # #
     # Read all records from DATA_FILE, return as list of Record.
-    # # #
+
     records: list[Record] = []
     try:
         with open(DATA_FILE, newline="", encoding="utf-8") as f:
@@ -120,13 +119,15 @@ def load_data() -> list[Record]:
 
 
 def save_data(record: Record) -> None:
-    # # #
-    #  Append one Record to DATA_FILE, writing header if necessary.
-    # # #
+    # Append one Record to DATA_FILE, writing header if necessary.
+
     write_header = False
     try:
         with open(DATA_FILE, "r", encoding="utf-8"):
-            pass
+            if not f.read(
+                1
+            ):  # Try reading the first character, if not -> write_header == True
+                write_header = True
     except FileNotFoundError:
         write_header = True
 
@@ -135,15 +136,15 @@ def save_data(record: Record) -> None:
             f,
             fieldnames=["date", "type", "amount", "currency", "description"],
         )
-        if write_header:
+
+        if write_header:  # Checks if CSV needs headers, writes it in if so
             writer.writeheader()
+
         writer.writerow(record.to_dict())
 
 
 def load_main_currency() -> str:
-    # # #
     # Read main_currency from SETTINGS_FILE, defaulting to 'RUB' if missing.
-    # # #
     try:
         with open(SETTINGS_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -153,9 +154,7 @@ def load_main_currency() -> str:
 
 
 def save_main_currency(currency: str) -> None:
-    # # #
     # Persist main_currency to SETTINGS_FILE.
-    # # #
     with open(SETTINGS_FILE, "w", encoding="utf-8") as f:
         json.dump({"main_currency": currency}, f)
 
@@ -165,13 +164,11 @@ def save_main_currency(currency: str) -> None:
 
 @app.route("/")
 def index():
-    # # #
     # Render the main dashboard:
     #   - Load records
     #   - Load user’s main currency
     #   - Fetch rates
     #   - Compute income, expense, balance
-    # # #
 
     records = load_data()
     main_currency = load_main_currency()
@@ -204,10 +201,8 @@ def index():
 
 @app.route("/add", methods=["POST"])
 def add_entry():
-    # # #
     # Handle form submission to add a new record.
     # Infers type from sign of amount (>=0 → income, <0 → expense).
-    # # #
 
     raw_amount = float(request.form["amount"])
 
@@ -218,16 +213,14 @@ def add_entry():
         currency=request.form.get("currency", load_main_currency()),
         description=request.form.get("description", "").strip(),
     )
-    print(record.type)
+
     save_data(record)
     return redirect(url_for("index"))
 
 
 @app.route("/set_currency", methods=["POST"])
 def change_currency():
-    # # #
     # Save the user’s preferred main currency and redirect home.
-    # # #
     currency = request.form.get("main_currency")
     if currency:
         save_main_currency(currency)
@@ -236,10 +229,8 @@ def change_currency():
 
 @app.route("/delete/<int:idx>", methods=["POST"])
 def delete_entry(idx: int):
-    # # #
-    # Delete the record at position idx (zero-based) in the CSV.
+    # Delete the record at position index in the CSV.
     # Then rewrite the file without it.
-    # # #
     records = load_data()
     if 0 <= idx < len(records):
         removed = records.pop(idx)
