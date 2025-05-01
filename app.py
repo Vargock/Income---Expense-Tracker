@@ -78,10 +78,8 @@ def format_currency(value: float, currency: str) -> str:
 
 
 def fetch_exchange_rates(base: str = "USD") -> dict[str, float]:
-    ###
     # Retrieve conversion rates from the external API.
     # Returns a mapping currency_code -> rate.
-    ###
     url = f"{EXCHANGE_API_URL}/{EXCHANGE_API_KEY}/latest/{base}"
     try:
         resp = requests.get(url, timeout=5)
@@ -89,8 +87,8 @@ def fetch_exchange_rates(base: str = "USD") -> dict[str, float]:
         if data.get("result") == "success":
             return data["conversion_rates"]
         app.logger.error("Exchange API error: %s", data.get("error-type"))
-    except requests.RequestException as e:
-        app.logger.error("Request to Exchange API failed: %s", e)
+    except requests.RequestException as exception:
+        app.logger.error("Request to Exchange API failed: %s", exception)
     return {}
 
 
@@ -123,10 +121,11 @@ def save_data(record: Record) -> None:
 
     write_header = False
     try:
-        with open(DATA_FILE, "r", encoding="utf-8"):
-            if not f.read(
-                1
-            ):  # Try reading the first character, if not -> write_header == True
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            first_char = f.read(1)
+            if (
+                not first_char
+            ):  # Try reading the first character, if empty  -> write_header == True
                 write_header = True
     except FileNotFoundError:
         write_header = True
