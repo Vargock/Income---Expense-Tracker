@@ -26,9 +26,9 @@
       CURRENCY SELECTOR
       ------------------------>
       <form method="POST" action="/set_currency" class="currency-form"> <!-- Method POST connects to set_currency() funct in app.py -->
-      <div class="currency-form__selector">
         <button
           type="button"
+          id="currency-btn"
           class="currency-form__btn"
           onclick="toggleCurrencyDropdown()"
         >
@@ -36,20 +36,18 @@
           else '€' if main_currency == 'EUR' else '₺' if main_currency == 'TRY'
           else main_currency }}
         </button>
-        <div id="currencyDropdown" class="currency-form__dropdown">
-          <select
-            name="main_currency"
-            class="currency-form__select"
-            onchange="this.form.submit()"
-            size="4"
-          >
-            <option value="RUB" {% if main_currency == "RUB" %}selected{% endif %}>₽ RUB</option>
-            <option value="USD" {% if main_currency == "USD" %}selected{% endif %}>$ USD</option>
-            <option value="EUR" {% if main_currency == "EUR" %}selected{% endif %}>€ EUR</option>
-            <option value="TRY" {% if main_currency == "TRY" %}selected{% endif %}>₺ TRY</option>
-          </select>
-        </div>
-      </div>
+        <select
+          name="main_currency"
+          id="currency-selector"
+          class="currency-form__select"
+          onchange="this.form.submit()"
+          size="4"
+        >
+          <option value="RUB" {% if main_currency == "RUB" %}selected{% endif %}>₽ RUB</option>
+          <option value="USD" {% if main_currency == "USD" %}selected{% endif %}>$ USD</option>
+          <option value="EUR" {% if main_currency == "EUR" %}selected{% endif %}>€ EUR</option>
+          <option value="TRY" {% if main_currency == "TRY" %}selected{% endif %}>₺ TRY</option>
+        </select>
     </form>
 
     <!-----------------------
@@ -284,8 +282,8 @@
       // === Currency Dropdown ===
       function toggleCurrencyDropdown() {
         document
-          .getElementById("currencyDropdown")
-          .classList.toggle("currency-form__dropdown--show");
+          .getElementById("currency-selector")
+          .classList.toggle("currency-form__select--show");
       }
 
       // Ensure modals start hidden

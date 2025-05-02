@@ -111,12 +111,14 @@ body .currency-form {
   top: 20px;
   right: 20px;
   z-index: 1000;
-}
-body .currency-form__selector {
-  position: relative;
-  display: inline-block;
+  border-radius: 6px;
 }
 body .currency-form__btn {
+  position: absolute;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: none;
   border: none;
   font-size: 32px;
@@ -125,17 +127,15 @@ body .currency-form__btn {
   cursor: pointer;
   padding: 10px;
   border-radius: 6px;
-  transition: background-color 0.2s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 44px;
-  height: 44px;
+  transition: background-color 1s ease, font-size 1s ease;
+  width: 55px;
+  height: 55px;
 }
 body .currency-form__btn:hover {
   background-color: #f0f0f0;
+  font-size: 2.5em;
 }
-body .currency-form__dropdown {
+body .currency-form__select {
   display: none;
   position: absolute;
   top: 52px;
@@ -143,32 +143,21 @@ body .currency-form__dropdown {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 6px;
-  padding: 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  min-width: 120px;
-  z-index: 1001;
-}
-body .currency-form__dropdown--show {
-  display: block;
-}
-body .currency-form__select {
-  width: 100%;
-  border: none;
-  background-color: transparent;
-  font-size: 16px;
   padding: 4px 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
   cursor: pointer;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-  outline: none;
   box-sizing: border-box;
   height: auto;
-  font-family: inherit;
+  min-width: 120px;
+}
+body .currency-form__select--show {
+  display: block;
 }
 body .currency-form__select option {
   padding: 8px 10px;
   background-color: white;
+  font-family: inherit;
   color: #2c3e50;
 }
 body .currency-form__select option:hover {
