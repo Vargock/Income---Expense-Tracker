@@ -7,7 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Your Wallet</title>
-
+    <link rel="icon"  type="image/x-icon" href="/static/favicon.ico">
     <!-----------------------
       CSS
     ------------------------>
@@ -151,7 +151,9 @@
 
         <label for="amount" class="modal__entry-form-label">Amount:</label>
         <input
-          type="number"
+          type="decimal"
+          value="0"
+          pattern="[0-9]+([,.][0-9]+)?"
           name="amount"
           id="amount"
           class="modal__entry-form-input"
@@ -232,9 +234,25 @@
       JAVASCRIPT
     ------------------------>
     <script>
-      const overlay = document.getElementById("overlay");
+      document.getElementById('amount').addEventListener('input', function (e) {
+        let value = e.target.value;
 
-      overlay.addEventListener("click", () => {
+        // Allow digits and only one comma or dot as decimal separator
+        value = value
+          .replace(/[^0-9.,]/g, '')          // Remove all non-numeric, non-dot/comma
+          .replace(',', '.');                // Convert comma to dot
+
+        // Only keep the first dot, remove extras
+        const parts = value.split('.');
+        if (parts.length > 2) {
+          value = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        e.target.value = value;
+      });
+
+      // === Closes modals if overlay is clicked === 
+      document.getElementById("overlay").addEventListener("click", () => {
         const addModal = document.getElementById("ad-entry-modal");
         const deleteModal = document.getElementById("delete-modal");
 
