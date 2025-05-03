@@ -1,6 +1,6 @@
 # Income / Expense Tracker
 
-Go here for the website: https://income-expense-tracker-ajze.onrender.com/
+Go here to visit online version of website: https://income-expense-tracker-ajze.onrender.com/
 
 ### Description
 
